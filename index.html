@@ -56,7 +56,7 @@
     padding: 8px 0 4px; transition: color 0.15s;
   }
   .tab-btn.active { color: var(--text); }
-  .tab-icon { font-size: 32px; line-height: 1; transition: transform 0.15s; }
+  .tab-icon { font-size: 36px; line-height: 1; transition: transform 0.15s; }
   .tab-btn:active .tab-icon { transform: scale(0.88); }
 
   /* Screen headers */
@@ -104,7 +104,7 @@
     background: transparent;
     flex-direction: column; gap: 6px;
   }
-  .add-tile-icon { font-size: 32px; color: var(--text3); }
+  .add-tile-icon { font-size: 64px; color: var(--text3); line-height: 1; }
   .add-tile-label { font-size: 12px; color: var(--text3); }
 
   /* Recent strip */
@@ -588,7 +588,14 @@ function drawRandom() {
   lastDie = newDie;
   const dieIconEl = document.getElementById('die-icon');
   if (newDie === '⚄') {
-    dieIconEl.innerHTML = '<span style="position:relative;display:inline-block;line-height:1;">⚄<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-42%);width:4px;height:4px;background:#ff2020;border-radius:50%;display:block;"></span></span>';
+    dieIconEl.innerHTML = `<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+      <rect x="1" y="1" width="34" height="34" rx="5" ry="5" fill="white"/>
+      <circle cx="9" cy="9" r="3" fill="black"/>
+      <circle cx="27" cy="9" r="3" fill="black"/>
+      <circle cx="18" cy="18" r="3" fill="#ff2020"/>
+      <circle cx="9" cy="27" r="3" fill="black"/>
+      <circle cx="27" cy="27" r="3" fill="black"/>
+    </svg>`;
   } else {
     dieIconEl.textContent = newDie;
   }
