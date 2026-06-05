@@ -34,6 +34,7 @@
   /* Screens */
   .screen { display: none; flex-direction: column; flex: 1; overflow: hidden; }
   .screen.active { display: flex; }
+  #add-screen.active { display: flex; }
 
   /* Scrollable content area */
   .scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(var(--tab-height) + var(--safe-bottom) + 16px); }
@@ -184,7 +185,8 @@
   .grid-empty { grid-column: span 2; padding: 40px 20px; text-align: center; color: var(--text3); font-size: 13px; }
 
   /* Add flow */
-  #add-screen { background: var(--bg); }
+  #add-screen { background: var(--bg); position: fixed; inset: 0; z-index: 50; padding-top: var(--safe-top); display: none; flex-direction: column; }
+  #add-screen.active { display: flex; }
   .add-header { padding: 16px 20px 12px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .add-title { font-size: 20px; font-weight: 600; }
   .close-btn { font-size: 20px; color: var(--text2); background: none; border: none; cursor: pointer; padding: 4px; }
@@ -512,18 +514,16 @@ function switchTab(tab) {
 function showAdd() {
   addState = { imageData: null, bucket: null, tags: [], caption: '' };
   resetAddForm();
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('add-screen').classList.add('active');
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
 }
 
 function hideAdd() {
-  switchTab(currentTab === 'home' ? 'home' : currentTab);
-  currentTab = currentTab === 'home' ? 'home' : currentTab;
+  document.getElementById('add-screen').classList.remove('active');
+  currentTab = 'home';
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('home-screen').classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-home').classList.add('active');
-  currentTab = 'home';
   refreshHome();
 }
 
