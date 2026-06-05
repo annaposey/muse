@@ -56,7 +56,7 @@
     padding: 8px 0 4px; transition: color 0.15s;
   }
   .tab-btn.active { color: var(--text); }
-  .tab-icon { font-size: 22px; line-height: 1; transition: transform 0.15s; }
+  .tab-icon { font-size: 28px; line-height: 1; transition: transform 0.15s; }
   .tab-btn:active .tab-icon { transform: scale(0.88); }
 
   /* Screen headers */
@@ -306,7 +306,6 @@
         </div>
         <div class="bucket-tile add-tile" onclick="showAdd()">
           <span class="add-tile-icon">＋</span>
-          <span class="add-tile-label">Add image</span>
         </div>
       </div>
       <div class="section-label">Recently added</div>
@@ -419,7 +418,7 @@
       <span>Random</span>
     </button>
     <button class="tab-btn" id="tab-search" onclick="switchTab('search')">
-      <span class="tab-icon">⌕</span>
+      <span class="tab-icon">🔍</span>
       <span>Search</span>
     </button>
   </div>
@@ -587,7 +586,12 @@ function drawRandom() {
   const remaining = DIE_FACES.filter(f => f !== lastDie);
   const newDie = remaining[Math.floor(Math.random() * remaining.length)];
   lastDie = newDie;
-  document.getElementById('die-icon').textContent = newDie;
+  const dieIconEl = document.getElementById('die-icon');
+  if (newDie === '⚄') {
+    dieIconEl.innerHTML = '<span style="position:relative;display:inline-block;line-height:1;">⚄<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:5px;height:5px;background:#ff2020;border-radius:50%;display:block;"></span></span>';
+  } else {
+    dieIconEl.textContent = newDie;
+  }
   const img = library[Math.floor(Math.random() * library.length)];
   const wrap = document.getElementById('random-image-wrap');
   wrap.innerHTML = `<img src="${img.imageData}" alt="Random image" style="width:100%;height:100%;object-fit:contain;">`;
