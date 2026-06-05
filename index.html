@@ -234,7 +234,7 @@
   .new-tag-input::placeholder { color: var(--text3); }
   .new-tag-add {
     background: var(--bg2); border: 0.5px solid var(--border2); border-radius: 10px;
-    padding: 6px 12px; font-size: 12px; color: var(--text2); cursor: pointer;
+    padding: 6px 12px; font-size: 16px; color: var(--text2); cursor: pointer;
   }
 
   #caption-input {
@@ -248,10 +248,11 @@
   #save-btn {
     margin: 16px 20px; background: var(--text); color: var(--bg); border: none;
     border-radius: 24px; padding: 14px; font-size: 15px; font-weight: 600;
-    cursor: pointer; width: calc(100% - 40px); transition: opacity 0.15s;
+    cursor: pointer; width: calc(100% - 40px); transition: background 0.2s, color 0.2s, opacity 0.15s;
   }
   #save-btn:disabled { opacity: 0.3; }
   #save-btn:active:not(:disabled) { opacity: 0.8; }
+  #save-btn.added { background: var(--text3); color: var(--text); }
 
   /* Toast */
   #toast {
@@ -351,7 +352,7 @@
   <!-- ADD SCREEN -->
   <div class="screen" id="add-screen">
     <div class="add-header">
-      <div class="add-title">Add image</div>
+      <div class="add-title">add inspiration</div>
       <button class="close-btn" onclick="hideAdd()">✕</button>
     </div>
     <div class="scroll-area">
@@ -359,11 +360,10 @@
       <div class="add-step">
         <div class="add-step-header">
           <div class="step-num" id="step1-num">1</div>
-          <div class="step-title-text">Import image</div>
+          <div class="step-title-text">IMAGE</div>
         </div>
         <div id="img-drop-zone" onclick="document.getElementById('file-input').click()">
           <span id="img-drop-zone-icon">📷</span>
-          <span id="img-drop-zone-label">Tap to choose from camera roll</span>
         </div>
         <div id="img-preview-wrap">
           <img id="img-preview" src="" alt="Preview">
@@ -376,7 +376,7 @@
       <div class="add-step">
         <div class="add-step-header">
           <div class="step-num" id="step2-num">2</div>
-          <div class="step-title-text">Select collection</div>
+          <div class="step-title-text">COLLECTION</div>
         </div>
         <div class="bucket-row">
           <button class="bucket-btn" onclick="selectBucket('art')">Art</button>
@@ -389,7 +389,7 @@
       <div class="add-step">
         <div class="add-step-header">
           <div class="step-num" id="step3-num">3</div>
-          <div class="step-title-text">Assign tags</div>
+          <div class="step-title-text">TAGS</div>
         </div>
         <div id="tags-area"></div>
         <div id="tags-placeholder" style="font-size:12px; color:var(--text3);">Select a collection above to see tag options.</div>
@@ -399,12 +399,12 @@
       <div class="add-step">
         <div class="add-step-header">
           <div class="step-num" id="step4-num">4</div>
-          <div class="step-title-text">Caption <span class="step-optional">(optional)</span></div>
+          <div class="step-title-text">CAPTION <span class="step-optional">(optional)</span></div>
         </div>
         <textarea id="caption-input" placeholder="e.g. Rodarte AW23 · Kate & Laura Mulleavy" rows="3"></textarea>
       </div>
 
-      <button id="save-btn" onclick="saveImage()" disabled>Save to library</button>
+      <button id="save-btn" onclick="saveImage()" disabled>add to library</button>
     </div>
   </div>
 
@@ -747,7 +747,7 @@ function buildTagsArea(bucket) {
       </div>
       <div class="new-tag-row">
         <input class="new-tag-input" placeholder="Add new tag…" id="new-input-${typeName.replace(/\s/g,'-')}">
-        <button class="new-tag-add" onclick="addNewTag('${typeName}')">Add</button>
+        <button class="new-tag-add" onclick="addNewTag('${typeName}')">+</button>
       </div>
     </div>
   `).join('');
@@ -798,8 +798,11 @@ function saveImage() {
   };
   library.unshift(entry);
   saveLibrary(library);
-  showToast('Image saved to library ✓');
-  hideAdd();
+  const btn = document.getElementById('save-btn');
+  btn.textContent = 'added!';
+  btn.classList.add('added');
+  btn.disabled = true;
+  setTimeout(() => { hideAdd(); }, 1000);
 }
 
 // ─── UTILS ────────────────────────────────────────────────────────────────────
