@@ -147,7 +147,7 @@
     flex-shrink: 0;
   }
   #random-meta.visible { display: block; }
-  #random-meta-caption { font-size: 13px; color: var(--text2); margin-bottom: 10px; line-height: 1.5; }
+  #random-meta-caption { font-size: 13px; color: var(--text2); margin-bottom: 10px; line-height: 1.5; font-style: italic; }
   .random-tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
   .random-tag { background: var(--bg2); border: 0.5px solid var(--border2); border-radius: 14px; padding: 4px 12px; font-size: 11px; color: var(--text2); }
   #random-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--text3); font-size: 14px; }
@@ -279,21 +279,21 @@
     </div>
     <div class="scroll-area">
       <div id="home-grid">
-        <div class="bucket-tile" onclick="openBucket('art')">
+        <div class="bucket-tile" id="tile-art" onclick="openBucket('art')">
           <span class="bucket-tile-icon">🎨</span>
           <div class="bucket-tile-foot">
             <div class="bucket-tile-name">Art</div>
             <div class="bucket-tile-count" id="art-count">0 images</div>
           </div>
         </div>
-        <div class="bucket-tile" onclick="openBucket('fashion')">
+        <div class="bucket-tile" id="tile-fashion" onclick="openBucket('fashion')">
           <span class="bucket-tile-icon">🧵</span>
           <div class="bucket-tile-foot">
             <div class="bucket-tile-name">Fashion</div>
             <div class="bucket-tile-count" id="fashion-count">0 images</div>
           </div>
         </div>
-        <div class="bucket-tile" onclick="openBucket('reference')">
+        <div class="bucket-tile" id="tile-reference" onclick="openBucket('reference')">
           <span class="bucket-tile-icon">📐</span>
           <div class="bucket-tile-foot">
             <div class="bucket-tile-name">Reference</div>
@@ -526,6 +526,12 @@ function hideAdd() {
 }
 
 // ─── HOME ─────────────────────────────────────────────────────────────────────
+function getRandomBucketImage(bucket) {
+  const imgs = library.filter(img => img.bucket === bucket);
+  if (imgs.length === 0) return null;
+  return imgs[Math.floor(Math.random() * imgs.length)].imageData;
+}
+
 function refreshHome() {
   const counts = { art: 0, fashion: 0, reference: 0 };
   library.forEach(img => { if (counts[img.bucket] !== undefined) counts[img.bucket]++; });
@@ -534,6 +540,23 @@ function refreshHome() {
   ['art','fashion','reference'].forEach(b => {
     const el = document.getElementById(b + '-count');
     if (el) el.textContent = `${counts[b].toLocaleString()} image${counts[b] !== 1 ? 's' : ''}`;
+    const tile = document.getElementById('tile-' + b);
+    if (tile) {
+      const imgData = getRandomBucketImage(b);
+      const iconEl = tile.querySelector('.bucket-tile-icon');
+      const existingBg = tile.querySelector('.bucket-tile-bg');
+      if (existingBg) existingBg.remove();
+      if (imgData) {
+        if (iconEl) iconEl.style.display = 'none';
+        const bg = document.createElement('img');
+        bg.className = 'bucket-tile-bg';
+        bg.src = imgData;
+        bg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+        tile.insertBefore(bg, tile.firstChild);
+      } else {
+        if (iconEl) iconEl.style.display = '';
+      }
+    }
   });
   const strip = document.getElementById('recent-strip');
   const recent = [...library].sort((a,b) => b.dateAdded - a.dateAdded).slice(0, 8);
