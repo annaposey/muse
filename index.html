@@ -361,7 +361,7 @@
           <div class="step-num" id="step1-num">1</div>
           <div class="step-title-text">IMAGE</div>
         </div>
-        <div id="img-drop-zone" onclick="document.getElementById('file-input').click()">
+        <div id="img-drop-zone" onclick="triggerPhotoPicker()">
           <span id="img-drop-zone-icon" style="font-size:48px; font-weight:700; color:var(--text3); line-height:1;">+</span>
         </div>
         <div id="img-preview-wrap">
@@ -369,6 +369,7 @@
           <button id="img-preview-remove" onclick="removeImage()">✕</button>
         </div>
         <input type="file" id="file-input" accept="image/*" onchange="handleImageSelect(event)">
+        <input type="file" id="file-input-photo" accept="image/*" capture="user" style="display:none" onchange="handleImageSelect(event)">
       </div>
 
       <!-- Step 2: Bucket -->
@@ -588,14 +589,8 @@ function drawRandom() {
   lastDie = newDie;
   const dieIconEl = document.getElementById('die-icon');
   if (newDie === '⚄') {
-    dieIconEl.innerHTML = `<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
-      <rect x="1" y="1" width="34" height="34" rx="5" ry="5" fill="white"/>
-      <circle cx="9" cy="9" r="3" fill="black"/>
-      <circle cx="27" cy="9" r="3" fill="black"/>
-      <circle cx="18" cy="18" r="3" fill="#ff2020"/>
-      <circle cx="9" cy="27" r="3" fill="black"/>
-      <circle cx="27" cy="27" r="3" fill="black"/>
-    </svg>`;
+    dieIconEl.textContent = '⚄';
+  } else {
   } else {
     dieIconEl.textContent = newDie;
   }
@@ -709,6 +704,12 @@ function resetAddForm() {
   ['step1-num','step2-num','step3-num','step4-num'].forEach(id => {
     document.getElementById(id).classList.remove('done');
   });
+}
+
+function triggerPhotoPicker() {
+  const input = document.getElementById('file-input');
+  input.removeAttribute('capture');
+  input.click();
 }
 
 function handleImageSelect(e) {
