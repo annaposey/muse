@@ -363,7 +363,7 @@
           <div class="step-title-text">IMAGE</div>
         </div>
         <div id="img-drop-zone" onclick="document.getElementById('file-input').click()">
-          <span id="img-drop-zone-icon">📷</span>
+          <span id="img-drop-zone-icon" style="font-size:48px; font-weight:700; color:var(--text3); line-height:1;">+</span>
         </div>
         <div id="img-preview-wrap">
           <img id="img-preview" src="" alt="Preview">
@@ -691,7 +691,10 @@ function resetAddForm() {
   document.getElementById('tags-area').style.display = 'none';
   document.getElementById('tags-placeholder').style.display = 'block';
   document.getElementById('caption-input').value = '';
-  document.getElementById('save-btn').disabled = true;
+  const btn = document.getElementById('save-btn');
+  btn.textContent = 'add to library';
+  btn.classList.remove('added');
+  btn.disabled = true;
   ['step1-num','step2-num','step3-num','step4-num'].forEach(id => {
     document.getElementById(id).classList.remove('done');
   });
