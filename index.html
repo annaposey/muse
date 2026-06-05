@@ -786,11 +786,14 @@ function addNewTag(typeName) {
 }
 
 function checkSaveReady() {
-  document.getElementById('save-btn').disabled = !(addState.imageData && addState.bucket);
+  const btn = document.getElementById('save-btn');
+  if (btn.classList.contains('added')) return;
+  btn.disabled = !(addState.imageData && addState.bucket);
 }
 
 function saveImage() {
-  if (!addState.imageData || !addState.bucket) return;
+  const btn = document.getElementById('save-btn');
+  if (!addState.imageData || !addState.bucket || btn.classList.contains('added')) return;
   const entry = {
     id: Date.now().toString(36) + Math.random().toString(36).slice(2),
     bucket: addState.bucket,
@@ -801,7 +804,6 @@ function saveImage() {
   };
   library.unshift(entry);
   saveLibrary(library);
-  const btn = document.getElementById('save-btn');
   btn.textContent = 'added!';
   btn.classList.add('added');
   btn.disabled = true;
