@@ -124,6 +124,36 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 #add-overlay{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;flex-direction:column;padding-top:var(--safe-top);}
 #add-overlay.open{display:flex;}
 
+/* detail overlay */
+#detail-overlay{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;flex-direction:column;padding-top:var(--safe-top);}
+#detail-overlay.open{display:flex;}
+#detail-top-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;flex-shrink:0;}
+.detail-top-btn{background:none;border:none;color:var(--text2);font-size:16px;cursor:pointer;padding:4px 8px;letter-spacing:0.02em;}
+#detail-counter{font-size:12px;color:var(--text3);}
+#detail-img-wrap{position:relative;flex-shrink:0;height:52vw;max-height:340px;background:var(--bg1);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+#detail-img{max-width:100%;max-height:100%;object-fit:contain;}
+#detail-arrow-left,#detail-arrow-right{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);border:none;color:#fff;font-size:32px;line-height:1;width:44px;height:56px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px;}
+#detail-arrow-left{left:6px;}
+#detail-arrow-right{right:6px;}
+#detail-arrow-left:disabled,#detail-arrow-right:disabled{opacity:0.15;}
+#detail-meta{padding:14px 18px 8px;flex-shrink:0;border-bottom:0.5px solid var(--border);}
+#detail-caption{font-size:13px;color:var(--text2);font-style:italic;margin-bottom:10px;line-height:1.5;}
+.detail-tag-group{margin-bottom:8px;}
+.detail-tag-group-label{font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;}
+.detail-tag-row{display:flex;flex-wrap:wrap;gap:4px;}
+.detail-tag{background:var(--bg2);border:0.5px solid var(--border2);border-radius:12px;padding:3px 10px;font-size:11px;color:var(--text2);}
+#detail-edit-panel{display:none;flex:1;overflow-y:auto;padding:12px 18px;}
+#detail-edit-panel.open{display:block;}
+.edit-tag-section{margin-bottom:14px;}
+.edit-tag-type-name{font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;}
+.edit-tag-options{display:flex;flex-wrap:wrap;gap:6px;}
+.edit-tag-opt{background:var(--bg2);border:0.5px solid var(--border2);border-radius:16px;padding:5px 12px;font-size:12px;color:var(--text2);cursor:pointer;transition:all 0.15s;}
+.edit-tag-opt.active{background:var(--text);color:var(--bg);border-color:var(--text);}
+.edit-new-row{display:flex;gap:6px;margin-top:6px;}
+.edit-new-input{flex:1;background:var(--bg1);border:0.5px solid var(--border2);border-radius:10px;padding:6px 10px;font-size:12px;color:var(--text);outline:none;-webkit-appearance:none;}
+.edit-new-input::placeholder{color:var(--text3);}
+.edit-new-add{background:var(--bg2);border:0.5px solid var(--border2);border-radius:10px;padding:6px 14px;font-size:18px;color:var(--text2);cursor:pointer;}
+
 /* toast */
 #toast{position:fixed;bottom:calc(var(--tab-h) + var(--safe-bottom) + 16px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg2);border:0.5px solid var(--border2);border-radius:20px;padding:10px 20px;font-size:13px;color:var(--text2);opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;z-index:200;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -272,7 +302,48 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
   </div>
 </div>
 
-<div id="toast"></div>
+<!-- DETAIL OVERLAY -->
+<div id="detail-overlay">
+  <div id="detail-top-bar">
+    <button class="detail-top-btn" onclick="hideDetail()">✕</button>
+    <div id="detail-counter"></div>
+    <button class="detail-top-btn" id="detail-edit-btn" onclick="toggleDetailEdit()">edit</button>
+  </div>
+  <div id="detail-img-wrap">
+    <img id="detail-img" src="" alt="">
+    <button id="detail-arrow-left" onclick="detailNav(-1)">‹</button>
+    <button id="detail-arrow-right" onclick="detailNav(1)">›</button>
+  </div>
+  <div id="detail-meta">
+    <div id="detail-caption"></div>
+    <div id="detail-tags-view"></div>
+  </div>
+  <div id="detail-edit-panel">
+    <div id="detail-edit-tags"></div>
+  </div>
+</div>
+
+<!-- DETAIL OVERLAY -->
+<div id="detail-overlay">
+  <div id="detail-top-bar">
+    <button class="detail-icon-btn" onclick="hideDetail()">✕</button>
+    <div id="detail-bucket-label"></div>
+    <button class="detail-icon-btn" id="detail-edit-btn" onclick="toggleEditMode()">Edit</button>
+  </div>
+  <div id="detail-image-wrap">
+    <button id="detail-arrow-left" onclick="detailNav(-1)">‹</button>
+    <img id="detail-img" src="" alt="">
+    <button id="detail-arrow-right" onclick="detailNav(1)">›</button>
+  </div>
+  <div id="detail-meta" class="scroll-area" style="padding-bottom:32px;">
+    <div id="detail-caption"></div>
+    <div id="detail-tags"></div>
+    <div id="detail-edit-area" style="display:none;"></div>
+    <div id="detail-save-row" style="display:none;">
+      <button id="detail-save-btn" onclick="saveDetailEdits()">save changes</button>
+    </div>
+  </div>
+</div>
 
 <script>
 const DB_KEY = 'muse_library';
@@ -367,13 +438,136 @@ function refreshHome() {
     }
   });
   const strip = document.getElementById('recent-strip');
-  const recent = [...library].sort((a,b)=>b.dateAdded-a.dateAdded).slice(0,8);
-  strip.innerHTML = recent.length===0
+  const recent = [...library].sort((a,b)=>b.dateAdded-a.dateAdded).slice(0,10);
+  const homeRecent = recent.slice(0,5);
+  strip.innerHTML = homeRecent.length===0
     ? '<div class="recent-empty">＋</div>'
-    : recent.map(img=>`<div class="recent-thumb"><img src="${img.imageData}" loading="lazy"></div>`).join('');
+    : homeRecent.map((img,i)=>`<div class="recent-thumb" onclick="openDetail(${i},true)"><img src="${img.imageData}" loading="lazy"></div>`).join('');
 }
 
 function openBucket(b) { showToast(`${b.charAt(0).toUpperCase()+b.slice(1)} browser coming soon`); }
+
+// ── DETAIL VIEW ───────────────────────────────────────────────────────────────
+let detailImages = [];
+let detailIndex = 0;
+let detailEditOpen = false;
+
+function openDetail(index, fromRecent) {
+  const sorted = [...library].sort((a,b)=>b.dateAdded-a.dateAdded);
+  detailImages = fromRecent ? sorted.slice(0,10) : sorted;
+  detailIndex = index;
+  detailEditOpen = false;
+  document.getElementById('detail-edit-panel').classList.remove('open');
+  document.getElementById('detail-edit-btn').textContent = 'edit';
+  document.getElementById('detail-overlay').classList.add('open');
+  renderDetail();
+}
+
+function hideDetail() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  saveLibrary(library);
+  refreshHome();
+}
+
+function renderDetail() {
+  const img = detailImages[detailIndex];
+  if(!img) return;
+  document.getElementById('detail-img').src = img.imageData;
+  document.getElementById('detail-counter').textContent = `${detailIndex+1} / ${detailImages.length}`;
+  document.getElementById('detail-caption').textContent = img.caption || '';
+  document.getElementById('detail-arrow-left').disabled = detailIndex === 0;
+  document.getElementById('detail-arrow-right').disabled = detailIndex === detailImages.length-1;
+
+  // tags view
+  const bucket = img.bucket;
+  const tagTypes = tagDB[bucket] ? Object.keys(tagDB[bucket]) : [];
+  const grouped = {};
+  img.tags.forEach(t => { if(!grouped[t.type]) grouped[t.type]=[]; grouped[t.type].push(t.value); });
+  const tagsViewEl = document.getElementById('detail-tags-view');
+  if(img.tags.length===0) {
+    tagsViewEl.innerHTML = '<div style="font-size:12px;color:var(--text3);">No tags assigned.</div>';
+  } else {
+    tagsViewEl.innerHTML = Object.entries(grouped).map(([type,vals])=>`
+      <div class="detail-tag-group">
+        <div class="detail-tag-group-label">${type}</div>
+        <div class="detail-tag-row">${vals.map(v=>`<div class="detail-tag">${v}</div>`).join('')}</div>
+      </div>`).join('');
+  }
+
+  // edit panel
+  if(detailEditOpen) renderDetailEdit();
+}
+
+function detailNav(dir) {
+  const next = detailIndex + dir;
+  if(next < 0 || next >= detailImages.length) return;
+  detailIndex = next;
+  detailEditOpen = false;
+  document.getElementById('detail-edit-panel').classList.remove('open');
+  document.getElementById('detail-edit-btn').textContent = 'edit';
+  renderDetail();
+}
+
+function toggleDetailEdit() {
+  detailEditOpen = !detailEditOpen;
+  document.getElementById('detail-edit-btn').textContent = detailEditOpen ? 'done' : 'edit';
+  const panel = document.getElementById('detail-edit-panel');
+  if(detailEditOpen) { panel.classList.add('open'); renderDetailEdit(); }
+  else { panel.classList.remove('open'); renderDetail(); }
+}
+
+function renderDetailEdit() {
+  const img = detailImages[detailIndex];
+  const bucket = img.bucket;
+  const bucketTags = tagDB[bucket];
+  if(!bucketTags) return;
+  const panel = document.getElementById('detail-edit-tags');
+  panel.innerHTML = Object.entries(bucketTags).map(([typeName,options])=>{
+    const allOpts = [...new Set([...options, ...img.tags.filter(t=>t.type===typeName).map(t=>t.value)])];
+    return `<div class="edit-tag-section">
+      <div class="edit-tag-type-name">${typeName}</div>
+      <div class="edit-tag-options" id="edit-opts-${typeName.replace(/\s/g,'-')}">
+        ${allOpts.map(opt=>{
+          const active = img.tags.some(t=>t.type===typeName&&t.value===opt);
+          return `<div class="edit-tag-opt${active?' active':''}" onclick="toggleDetailTag('${typeName}','${opt}',this)">${opt}</div>`;
+        }).join('')}
+      </div>
+      <div class="edit-new-row">
+        <input class="edit-new-input" placeholder="add new tag…" id="edit-new-${typeName.replace(/\s/g,'-')}">
+        <button class="edit-new-add" onclick="addDetailTag('${typeName}')">+</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleDetailTag(type, value, el) {
+  const img = detailImages[detailIndex];
+  const libImg = library.find(i=>i.id===img.id);
+  if(!libImg) return;
+  const idx = libImg.tags.findIndex(t=>t.type===type&&t.value===value);
+  if(idx>-1) { libImg.tags.splice(idx,1); el.classList.remove('active'); }
+  else { libImg.tags.push({type,value}); el.classList.add('active'); }
+  detailImages[detailIndex] = libImg;
+}
+
+function addDetailTag(typeName) {
+  const inputId = 'edit-new-'+typeName.replace(/\s/g,'-');
+  const input = document.getElementById(inputId);
+  const val = input.value.trim(); if(!val) return;
+  const img = detailImages[detailIndex];
+  const libImg = library.find(i=>i.id===img.id);
+  if(!libImg) return;
+  if(!tagDB[libImg.bucket][typeName].includes(val)) {
+    tagDB[libImg.bucket][typeName].push(val);
+    saveTagDB(tagDB);
+  }
+  if(!libImg.tags.some(t=>t.type===typeName&&t.value===val)) {
+    libImg.tags.push({type:typeName,value:val});
+  }
+  detailImages[detailIndex] = libImg;
+  input.value='';
+  renderDetailEdit();
+}
 
 // ── RANDOM ───────────────────────────────────────────────────────────────────
 function drawRandom() {
