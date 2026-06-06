@@ -780,11 +780,13 @@ function saveImage() {
     dateAdded: Date.now()
   };
   library.unshift(entry);
-  setTimeout(function() {
-    saveLibrary(library);
-    isSaving = false;
-    hideAdd();
-  }, 800);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      saveLibrary(library);
+      isSaving = false;
+      hideAdd();
+    });
+  });
 }
 
 function showToast(msg) {
