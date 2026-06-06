@@ -779,9 +779,9 @@ function saveImage() {
     tags: [...addState.tags],
     dateAdded: Date.now()
   });
-  saveLibrary(library);
   isSaving = false;
   hideAdd();
+  saveLibrary(library);
 }
 
 function showToast(msg) {
