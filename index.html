@@ -760,6 +760,7 @@ function checkSaveReady() {
 }
 
 function saveImage() {
+  alert('top of saveImage');
   if(isSaving || !addState.imageData || !addState.bucket) return;
   isSaving = true;
   const btn = document.getElementById('save-btn');
