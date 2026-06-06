@@ -121,6 +121,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 #caption-input{width:100%;background:var(--bg1);border:0.5px solid var(--border2);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--text);outline:none;resize:none;min-height:72px;font-family:inherit;-webkit-appearance:none;}
 #caption-input::placeholder{color:var(--text3);}
 #save-btn{margin:16px 20px;background:var(--text);color:var(--bg);border:none;border-radius:24px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;width:calc(100% - 40px);transition:background 0.2s,color 0.2s,opacity 0.15s;}
+#save-btn:disabled{opacity:0.3;pointer-events:none;}
+#save-btn.added{background:var(--text3);color:var(--text);pointer-events:none;}
 #add-overlay{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;flex-direction:column;padding-top:var(--safe-top);}
 #add-overlay.open{display:flex;}
 
@@ -300,7 +302,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
       <textarea id="caption-input" placeholder="e.g. Rodarte AW23 · Kate & Laura Mulleavy" rows="3"></textarea>
     </div>
 
-    <button id="save-btn" onclick="saveImage()" disabled>add to library</button>
+    <button id="save-btn" disabled>add to library</button>
   </div>
 </div>
 
@@ -761,6 +763,7 @@ function showToast(msg) {
   setTimeout(()=>t.classList.remove('show'),2200);
 }
 
+document.getElementById('save-btn').addEventListener('click', saveImage);
 refreshHome();
 </script>
 </body>
