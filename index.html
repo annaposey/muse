@@ -412,7 +412,9 @@ function showAdd() {
 }
 
 function hideAdd() {
-  document.getElementById('add-overlay').classList.remove('open');
+  const overlay = document.getElementById('add-overlay');
+  overlay.classList.remove('open');
+  overlay.style.display = 'none';
   refreshHome();
 }
 
@@ -779,7 +781,7 @@ function saveImage() {
   });
   saveLibrary(library);
   isSaving = false;
-  document.querySelector('#add-overlay .close-btn').click();
+  hideAdd();
 }
 
 function showToast(msg) {
