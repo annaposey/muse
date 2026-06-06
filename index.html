@@ -406,7 +406,9 @@ function switchTab(tab) {
 function showAdd() {
   addState = { imageData:null, bucket:null, tags:[] };
   resetAddForm();
-  document.getElementById('add-overlay').classList.add('open');
+  const overlay = document.getElementById('add-overlay');
+  overlay.style.display = '';
+  overlay.classList.add('open');
 }
 
 function hideAdd() {
@@ -777,7 +779,9 @@ function saveImage() {
   });
   saveLibrary(library);
   isSaving = false;
-  document.getElementById('add-overlay').classList.remove('open');
+  const overlay = document.getElementById('add-overlay');
+  overlay.classList.remove('open');
+  overlay.style.display = 'none';
   refreshHome();
 }
 
