@@ -760,7 +760,6 @@ function checkSaveReady() {
 }
 
 function saveImage() {
-  alert('saveImage called. isSaving='+isSaving+' imageData='+!!addState.imageData+' bucket='+addState.bucket);
   if(isSaving || !addState.imageData || !addState.bucket) return;
   isSaving = true;
   const btn = document.getElementById('save-btn');
@@ -777,7 +776,7 @@ function saveImage() {
     dateAdded: Date.now()
   });
   saveLibrary(library);
-  setTimeout(() => { isSaving = false; hideAdd(); }, 1000);
+  setTimeout(function() { isSaving = false; hideAdd(); }, 1200);
 }
 
 function showToast(msg) {
