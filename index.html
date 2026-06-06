@@ -45,6 +45,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .recent-thumb{width:72px;height:72px;border-radius:10px;background:var(--bg2);flex-shrink:0;overflow:hidden;cursor:pointer;}
 .recent-thumb img{width:100%;height:100%;object-fit:cover;}
 .recent-empty{width:72px;height:72px;border-radius:10px;background:var(--bg1);border:0.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--border2);font-size:20px;}
+#random-top-bar{display:flex;align-items:center;padding:12px 16px;flex-shrink:0;}
 #random-image-wrap{flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg1);cursor:pointer;overflow:hidden;}
 #random-image-wrap img{width:100%;height:100%;object-fit:contain;}
 #random-placeholder{display:flex;flex-direction:column;align-items:center;gap:12px;}
@@ -191,6 +192,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
   </div>
 
   <div class="screen" id="random-screen">
+    <div id="random-top-bar">
+      <button class="detail-top-btn" onclick="closeRandom()">✕</button>
+      <div style="flex:1;"></div>
+    </div>
     <div id="random-image-wrap" onclick="toggleRandomMeta()">
       <div id="random-placeholder">
         <div id="random-die">⚀</div>
@@ -462,6 +467,10 @@ function refreshHome() {
 function openBucket(b) { showToast(b.charAt(0).toUpperCase()+b.slice(1)+' browser coming soon'); }
 
 // ── RANDOM ───────────────────────────────────────────────────────────────────
+function closeRandom() {
+  switchTab('home');
+}
+
 function drawRandom() {
   randomMetaVisible = false;
   document.getElementById('random-meta').classList.remove('visible');
