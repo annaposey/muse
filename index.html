@@ -302,7 +302,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
       <textarea id="caption-input" placeholder="e.g. Rodarte AW23 · Kate & Laura Mulleavy" rows="3"></textarea>
     </div>
 
-    <button id="save-btn" disabled>add to library</button>
+    <button id="save-btn" onclick="saveImage()" disabled>add to library</button>
   </div>
 </div>
 
@@ -790,7 +790,6 @@ function showToast(msg) {
   setTimeout(()=>t.classList.remove('show'),2200);
 }
 
-document.getElementById('save-btn').addEventListener('click', saveImage);
 refreshHome();
 </script>
 </body>
