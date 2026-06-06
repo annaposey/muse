@@ -771,17 +771,20 @@ function saveImage() {
   btn.style.background = 'var(--text3)';
   btn.style.color = 'var(--text)';
   btn.style.pointerEvents = 'none';
-  library.unshift({
+  const entry = {
     id: Date.now().toString(36)+Math.random().toString(36).slice(2),
     bucket: addState.bucket,
     imageData: addState.imageData,
     caption: document.getElementById('caption-input').value.trim(),
     tags: [...addState.tags],
     dateAdded: Date.now()
-  });
-  isSaving = false;
-  hideAdd();
-  saveLibrary(library);
+  };
+  library.unshift(entry);
+  setTimeout(function() {
+    saveLibrary(library);
+    isSaving = false;
+    hideAdd();
+  }, 800);
 }
 
 function showToast(msg) {
