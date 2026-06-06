@@ -158,6 +158,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .edit-new-input::placeholder{color:var(--text3);}
 .edit-new-add{background:var(--bg2);border:0.5px solid var(--border2);border-radius:10px;padding:6px 14px;font-size:18px;color:var(--text2);cursor:pointer;}
 
+#save-btn.btn-added-anim { animation: added-pause 1.2s forwards; }
+@keyframes added-pause { 0%,90% { opacity:1; } 100% { opacity:0; } }
+
 /* toast */
 #toast{position:fixed;bottom:calc(var(--tab-h) + var(--safe-bottom) + 16px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg2);border:0.5px solid var(--border2);border-radius:20px;padding:10px 20px;font-size:13px;color:var(--text2);opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;z-index:200;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -675,6 +678,7 @@ function resetAddForm() {
   btn.style.opacity='0.3';
   btn.style.pointerEvents='none';
   btn.classList.remove('added');
+  btn.classList.remove('btn-added-anim');
   btn.disabled=false;
   ['step1-num','step2-num','step3-num','step4-num'].forEach(id=>document.getElementById(id).classList.remove('done'));
 }
@@ -780,13 +784,10 @@ function saveImage() {
     dateAdded: Date.now()
   };
   library.unshift(entry);
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() {
-      saveLibrary(library);
-      isSaving = false;
-      hideAdd();
-    });
-  });
+  saveLibrary(library);
+  isSaving = false;
+  btn.addEventListener('animationend', function() { hideAdd(); }, { once: true });
+  btn.classList.add('btn-added-anim');
 }
 
 function showToast(msg) {
