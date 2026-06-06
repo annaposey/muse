@@ -555,11 +555,16 @@ function renderBucketLevel(bucket, content) {
     content.innerHTML = '<div class="sq-grid" style="margin-top:8px;">' +
       usedTags.map(function(item) {
         var coverImg = getCoverImage(bucket, 'Tags', item.val, item.imgs);
-        return '<div class="sq-tile" onclick="browserDrillCollection(\''+bucket+'\',\'Tags\',\''+item.val+'\')">' +
+        return '<div class="sq-tile" data-bucket="'+bucket+'" data-tagtype="Tags" data-tagval="'+item.val+'">' +
           (coverImg ? '<img src="'+coverImg+'">' : '<span class="sq-tile-empty">🖼</span>') +
           '<div class="sq-tile-foot"><div class="sq-tile-name">'+item.val+'</div>' +
           '<div class="sq-tile-count">'+item.imgs.length+' image'+(item.imgs.length!==1?'s':'')+'</div></div></div>';
       }).join('') + '</div>';
+    content.querySelectorAll('.sq-tile').forEach(function(tile) {
+      tile.addEventListener('click', function() {
+        browserDrillCollection(tile.dataset.bucket, tile.dataset.tagtype, tile.dataset.tagval);
+      });
+    });
   }
 }
 
@@ -597,8 +602,18 @@ function renderCollectionLevel(bucket, tagType, tagValue, content) {
   }
   content.innerHTML = '<div class="image-grid" style="margin-top:8px;">' +
     imgs.map(function(img, i) {
-      return '<div class="grid-cell" onclick="openCollectionDetail('+i+',\''+bucket+'\',\''+tagType+'\',\''+tagValue+'\')"><img src="'+img.imageData+'" loading="lazy"></div>';
+      return '<div class="grid-cell" data-idx="'+i+'" data-bucket="'+bucket+'" data-tagtype="'+tagType+'" data-tagval="'+tagValue+'"><img src="'+img.imageData+'" loading="lazy"></div>';
     }).join('') + '</div>';
+  content.querySelectorAll('.grid-cell').forEach(function(cell) {
+    cell.addEventListener('click', function() {
+      openCollectionDetail(
+        parseInt(cell.dataset.idx),
+        cell.dataset.bucket,
+        cell.dataset.tagtype,
+        cell.dataset.tagval
+      );
+    });
+  });
 }
 
 function browserDrillTagType(bucket, tagType) {
