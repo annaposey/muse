@@ -606,6 +606,7 @@ function renderCollectionLevel(bucket, tagType, tagValue, content) {
     }).join('') + '</div>';
   content.querySelectorAll('.grid-cell').forEach(function(cell) {
     cell.addEventListener('click', function() {
+      alert('cell tapped idx='+cell.dataset.idx+' bucket='+cell.dataset.bucket);
       openCollectionDetail(
         parseInt(cell.dataset.idx),
         cell.dataset.bucket,
