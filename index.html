@@ -665,7 +665,13 @@ function resetAddForm() {
   document.getElementById('caption-input').value='';
   document.getElementById('file-input').value='';
   const btn = document.getElementById('save-btn');
-  btn.textContent='add to library'; btn.classList.remove('added'); btn.disabled=true;
+  btn.textContent='add to library';
+  btn.style.background='var(--text)';
+  btn.style.color='var(--bg)';
+  btn.style.opacity='0.3';
+  btn.style.pointerEvents='none';
+  btn.classList.remove('added');
+  btn.disabled=false;
   ['step1-num','step2-num','step3-num','step4-num'].forEach(id=>document.getElementById(id).classList.remove('done'));
 }
 
@@ -743,19 +749,34 @@ function addNewTag(typeName) {
   document.getElementById('step3-num').classList.add('done');
 }
 
+let isSaving = false;
+
 function checkSaveReady() {
+  if(isSaving) return;
   const btn = document.getElementById('save-btn');
-  if(btn.classList.contains('added')) return;
-  btn.disabled = !(addState.imageData && addState.bucket);
+  const ready = !!(addState.imageData && addState.bucket);
+  btn.style.opacity = ready ? '1' : '0.3';
+  btn.style.pointerEvents = ready ? 'auto' : 'none';
 }
 
 function saveImage() {
+  if(isSaving || !addState.imageData || !addState.bucket) return;
+  isSaving = true;
   const btn = document.getElementById('save-btn');
-  if(!addState.imageData||!addState.bucket||btn.classList.contains('added')) return;
-  library.unshift({ id:Date.now().toString(36)+Math.random().toString(36).slice(2), bucket:addState.bucket, imageData:addState.imageData, caption:document.getElementById('caption-input').value.trim(), tags:[...addState.tags], dateAdded:Date.now() });
+  btn.textContent = 'added!';
+  btn.style.background = 'var(--text3)';
+  btn.style.color = 'var(--text)';
+  btn.style.pointerEvents = 'none';
+  library.unshift({
+    id: Date.now().toString(36)+Math.random().toString(36).slice(2),
+    bucket: addState.bucket,
+    imageData: addState.imageData,
+    caption: document.getElementById('caption-input').value.trim(),
+    tags: [...addState.tags],
+    dateAdded: Date.now()
+  });
   saveLibrary(library);
-  btn.textContent='added!'; btn.classList.add('added'); btn.disabled=true;
-  setTimeout(()=>hideAdd(), 1000);
+  setTimeout(() => { isSaving = false; hideAdd(); }, 1000);
 }
 
 function showToast(msg) {
