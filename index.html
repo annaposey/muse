@@ -777,7 +777,10 @@ function saveImage() {
   });
   saveLibrary(library);
   isSaving = false;
-  document.getElementById('add-overlay').classList.remove('open');
+  const overlay = document.getElementById('add-overlay');
+  alert('before close. has open class: ' + overlay.classList.contains('open'));
+  overlay.classList.remove('open');
+  alert('after close. has open class: ' + overlay.classList.contains('open'));
   refreshHome();
 }
 
