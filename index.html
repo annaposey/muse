@@ -409,6 +409,7 @@ let tagDB = loadTagDB();
 let currentTab = 'home';
 let addState = { imageData:null, bucket:null, tags:[] };
 let lastDie = null;
+let lastRandomId = null;
 let randomMetaVisible = false;
 let activeFilters = {};
 let isSaving = false;
@@ -664,11 +665,13 @@ function drawRandom() {
     document.getElementById('random-image-wrap').innerHTML='<div style="color:var(--text3);font-size:14px;padding:20px;">Add some images first.</div>';
     return;
   }
-  var remaining = DIE_FACES.filter(function(f){ return f!==lastDie; });
-  var newDie = remaining[Math.floor(Math.random()*remaining.length)];
+  var remaining = library.length > 1 ? library.filter(function(i){ return i.id !== lastRandomId; }) : library;
+  var img = remaining[Math.floor(Math.random()*remaining.length)];
+  lastRandomId = img.id;
+  var remaining2 = DIE_FACES.filter(function(f){ return f!==lastDie; });
+  var newDie = remaining2[Math.floor(Math.random()*remaining2.length)];
   lastDie = newDie;
   document.getElementById('die-icon').textContent = newDie;
-  var img = library[Math.floor(Math.random()*library.length)];
   var wrap = document.getElementById('random-image-wrap');
   wrap.innerHTML = '<img src="'+img.imageData+'" alt="Random">';
   wrap.onclick = function(){ toggleRandomMeta(img); };
