@@ -779,10 +779,7 @@ function saveImage() {
   });
   saveLibrary(library);
   isSaving = false;
-  const overlay = document.getElementById('add-overlay');
-  overlay.classList.remove('open');
-  overlay.style.display = 'none';
-  refreshHome();
+  document.querySelector('#add-overlay .close-btn').click();
 }
 
 function showToast(msg) {
