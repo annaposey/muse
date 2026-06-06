@@ -776,7 +776,11 @@ function saveImage() {
     dateAdded: Date.now()
   });
   saveLibrary(library);
-  setTimeout(function() { isSaving = false; hideAdd(); }, 1200);
+  setTimeout(function() {
+    isSaving = false;
+    document.getElementById('add-overlay').classList.remove('open');
+    refreshHome();
+  }, 1200);
 }
 
 function showToast(msg) {
