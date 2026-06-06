@@ -654,8 +654,10 @@ function saveImage() {
   };
   dbSaveImage(entry).then(function() {
     library.unshift(entry);
-    isSaving=false;
-    hideAdd();
+    setTimeout(function() {
+      isSaving=false;
+      hideAdd();
+    }, 800);
   }).catch(function(e) {
     console.error('Save failed',e);
     isSaving=false;
